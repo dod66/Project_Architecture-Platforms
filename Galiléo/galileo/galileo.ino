@@ -1,6 +1,9 @@
+#include <WebSocketClient.h>
 #include <Ethernet.h>
 #include <SPI.h>
 #include <LiquidCrystal.h>
+
+
 
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
@@ -31,9 +34,10 @@ int readButtons(){                                              //Structuration 
 }
 
 EthernetClient client;
+WebSocketClient webSocketClient;
 
-void setup()
-{
+void setup() {
+  
   Ethernet.begin(mac, ip);
   
   Serial.begin(9600); 
@@ -50,6 +54,7 @@ void setup()
   } else {
     Serial.println("connection failed");
   }
+  
 }
 
 void loop() {
@@ -66,7 +71,9 @@ void loop() {
     for(;;)
       ;
   }
-
+  
+  webSocketClient.monitor();
+  
   key = readButtons();
   
    switch(key){                                                   //lecture des boutons
@@ -100,4 +107,8 @@ void loop() {
       delay(300);
     break;
   }
+}
+
+void dataArrived(WebSocketClient webSocketClient, String data) {
+  Serial.println("Data Arrived: " + data);
 }
