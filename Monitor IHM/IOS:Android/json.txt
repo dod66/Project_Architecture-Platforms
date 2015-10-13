@@ -1,0 +1,23 @@
+{
+	"areas": [
+		{ "name": "Quartier Nord",
+		"map": {
+			"weight": {"w": 1, "h": 1}, "vertices": [
+			{"name": "m", "x": 0.5, "y": 0.5},
+			{"name": "b", "x": 0.5, "y": 1} ],
+			"streets": [
+			{"name": "mb", "path": ["m", "b"], "oneway": false}
+			], "bridges": [
+			{ "from": "b", "to": {
+			"area": "Quartier Sud",
+			"vertex": "h"}, "weight": 2
+			} 
+		]
+	}
+},
+
+-Connexion
+-Chaque pc abonné (message envoyé en trame)
+-Afficher la map selon la trame
+-get position on click on the map
+-
