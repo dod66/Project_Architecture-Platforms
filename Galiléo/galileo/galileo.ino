@@ -1,3 +1,4 @@
+#include <aJSON.h>
 
 #include "Arduino.h"
 #include <Ethernet.h>
@@ -35,17 +36,71 @@ int readButtons(){                                              //Structuration 
 
 WebSocketClient client;
 
+char* parseJson(char *jsonString) ;
+
+// Json string to parse
+char jsonString[] = "{\"query\":{\"count\":1,\"created\":\"2012-08-04T14:46:03Z\",\"lang\":\"en-US\",\"results\":{\"item\":{\"title\":\"Handling FTP usernames with @ in them\"}}}}";
+
 void setup() {
   pinMode(Pin, OUTPUT);
   lcd.begin(16, 2);
   Serial.begin(9600);
   Serial.println("Connexion...");
-  //Serial.println("EXAMPLE: setup()");
+  
   Ethernet.begin(mac, ip);
   client.connect("192.168.1.10",6000);
   client.onOpen(onOpen);
   client.onMessage(onMessage);
   client.onError(onError);
+  
+  Serial.println(jsonString);
+  
+  char* value = parseJson(jsonString);
+
+    if (value) {
+        Serial.println("Successfully Parsed: ");
+        Serial.println(value);
+    } else {
+        Serial.println("There was some problem in parsing the JSON");
+    }
+}
+
+char* parseJson(char *jsonString) 
+{
+    char* value;
+
+    aJsonObject* root = aJson.parse(jsonString);
+
+    if (root != NULL) {
+        //Serial.println("Parsed successfully 1 " );
+        aJsonObject* query = aJson.getObjectItem(root, "query"); 
+
+        if (query != NULL) {
+            //Serial.println("Parsed successfully 2 " );
+            aJsonObject* results = aJson.getObjectItem(query, "results"); 
+
+            if (results != NULL) {
+                //Serial.println("Parsed successfully 3 " );
+                aJsonObject* item = aJson.getObjectItem(results, "item"); 
+
+                if (item != NULL) {
+                    //Serial.println("Parsed successfully 4 " );
+                    aJsonObject* title = aJson.getObjectItem(item, "title"); 
+                    
+                    if (title != NULL) {
+                        //Serial.println("Parsed successfully 5 " );
+                        value = title->valuestring;
+                    }
+                }
+            }
+        }
+    }
+
+    if (value) {
+        return value;
+    } else {
+        return NULL;
+    }
 }
 
 void loop() {
