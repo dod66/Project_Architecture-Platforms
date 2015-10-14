@@ -1,3 +1,4 @@
+
 #include "Arduino.h"
 #include <Ethernet.h>
 #include <SPI.h>
@@ -38,25 +39,26 @@ void setup() {
   pinMode(Pin, OUTPUT);
   lcd.begin(16, 2);
   Serial.begin(9600);
-  Serial.println("connecting...");
-  Serial.println("EXAMPLE: setup()");
+  Serial.println("Connexion...");
+  //Serial.println("EXAMPLE: setup()");
   Ethernet.begin(mac, ip);
-  client.connect("192.168.1.50",2009);
+  client.connect("192.168.1.10",6000);
   client.onOpen(onOpen);
   client.onMessage(onMessage);
   client.onError(onError);
-  client.send("Hello World!");
 }
 
 void loop() {
   client.monitor();
   
+  serialEvent();
   key = readButtons();
   
    switch(key){                                                   //lecture des boutons
     case btnUP:
       lcd.clear();
-      Serial.write("U");       
+      Serial.write("U");
+      client.send("Salut");      
       delay(300);
     break;
     
@@ -74,20 +76,28 @@ void loop() {
 
     case btnLEFT:
       lcd.clear();
-     Serial.write("L"); 
+      Serial.write("L"); 
       delay(300);
     break;
     
     case btnSELECT:
       lcd.clear();
-     Serial.write("S"); 
+      Serial.write("S"); 
       delay(300);
     break;
   }	
 }
 
+void serialEvent(){
+  if(Serial.available()){                                  //Tant que le port serie parle
+    String string=Serial.readStringUntil('\n');            //Stoque ce qui est lu sur le port série dans string
+    lcd.clear();                                           //nettoie l'écran lcd
+    lcd.print(string);                                     //écrit sur l'écran lcd
+  }
+}
+
 void onOpen(WebSocketClient client) {
-  Serial.println("EXAMPLE: onOpen()");
+  Serial.println("Connection etablie...");
 }
 
 void onMessage(WebSocketClient client, char* message) {
@@ -96,6 +106,6 @@ void onMessage(WebSocketClient client, char* message) {
 }
 
 void onError(WebSocketClient client, char* message) {
-  Serial.println("EXAMPLE: onError()");
+  //Serial.println("EXAMPLE: onError()");
   Serial.print("ERROR: "); Serial.println(message);
 }
