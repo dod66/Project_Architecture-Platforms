@@ -12,7 +12,3 @@ let url = NSURL(fileURLWithPath: "192.168.1.76")
 let request = NSURLRequest(URL:url)
 var response: NSURLResponse? = nil
 var error: NSError? = nil
-
-if(response == null){
-    print("Error");
-}
