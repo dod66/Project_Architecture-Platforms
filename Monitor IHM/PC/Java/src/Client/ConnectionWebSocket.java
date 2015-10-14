@@ -5,8 +5,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
-public class Connection extends Thread{
-	private String dest = "ws://172.30.0.190:5000"; //server adress Oli : ws://172.30.0.184:2009
+public class ConnectionWebSocket extends Thread{
+	private String dest = "ws://172.30.0.190:6000"; //server adress Oli : ws://172.30.0.184:2009
 	public void run(){ //main thread
 		WebSocketClient client = new WebSocketClient(); //WebSocket initialisation
 		try {

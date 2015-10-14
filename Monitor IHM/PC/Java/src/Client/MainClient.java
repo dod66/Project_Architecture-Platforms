@@ -4,7 +4,7 @@ public class MainClient {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Connection connect = new Connection();
+		ConnectionWebSocket connect = new ConnectionWebSocket();
 		connect.run(); //Run server connection
 	}
 }

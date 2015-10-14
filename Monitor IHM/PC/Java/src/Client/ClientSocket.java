@@ -20,16 +20,16 @@ public class ClientSocket {
 		@OnWebSocketMessage
 		//Init message received
 		public void onMessage(String message) throws IOException{ 
-			System.out.println("Message received from server: \n" + message); //Print in console
+			System.out.println("Message received from server : \n" + message); //Print in console
 		}
 		
-		/* Socket connexion */
+		/* Socket connection */
 		@OnWebSocketConnect
 		public void onConnect(Session session){
-			System.out.println("Connected to server: ");//Print on console
-			this.session = session;
-			//send message to server which permit to send the trame from it
-			sendMessage("{\"cmd\":\"areas\"}");
+				System.out.println("Connected to server: ");//Print on console
+				this.session = session;
+				//send message to server which permit to send the trame from it
+				sendMessage("test");
 		}
 
 		public void sendMessage(String str){ //function to send message to the server
