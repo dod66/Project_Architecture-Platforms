@@ -12,6 +12,8 @@ import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 @WebSocket(maxTextMessageSize = 64 * 1024)
 
 public class ClientSocket {
+	
+		private String message;
 		
 		//Init a session
 		private Session session; //Optional
@@ -21,6 +23,7 @@ public class ClientSocket {
 		//Init message received
 		public void onMessage(String message) throws IOException{ 
 			System.out.println("Message received from server : \n" + message); //Print in console
+			this.setMessage(message);
 		}
 		
 		/* Socket connection */
@@ -44,5 +47,13 @@ public class ClientSocket {
 		public boolean awaitClose(int i, TimeUnit hours) throws InterruptedException{
 			return this.latch.await(i, hours);
 			
+		}
+
+		public String getMessage() {
+			return message;
+		}
+
+		public void setMessage(String message) {
+			this.message = message;
 		}
 }
