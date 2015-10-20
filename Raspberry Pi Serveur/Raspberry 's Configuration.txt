@@ -5,11 +5,12 @@ At first, you have to download the latest version of Raspbian
 Next, be sure you have the Python2 version.
 If not download it and install pip.
 
-Next step, install package with apt-get : 
-- python-dev
-- python-lxml
+Next step you have install SimpleWebSocketServer
 
-And to finish, install python package with pip : 
-- flask
-- flask-socketio
-- gevent 
+with the command : 
+sudo pip install git+https://github.com/dpallot/simple-websocket-server.git
+
+or by download the repository locate at this address : 
+https://github.com/dpallot/simple-websocket-server
+
+You have all the documentation on the previous link.
