@@ -8,12 +8,16 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.json.simple.parser.ParseException;
+
+import frameTreatment.TraitementJSon;
 
 @WebSocket(maxTextMessageSize = 64 * 1024)
 
 public class ClientSocket {
 	
 		private String message;
+		private TraitementJSon traitement = new TraitementJSon();
 		
 		//Init a session
 		private Session session; //Optional
@@ -21,9 +25,10 @@ public class ClientSocket {
 		
 		@OnWebSocketMessage
 		//Init message received
-		public void onMessage(String message) throws IOException{ 
+		public void onMessage(String message) throws IOException, ParseException{ 
 			System.out.println("Message received from server : \n" + message); //Print in console
-			this.setMessage(message);
+			this.message=message;
+			traitement.testMapper(message);
 		}
 		
 		/* Socket connection */
@@ -47,13 +52,5 @@ public class ClientSocket {
 		public boolean awaitClose(int i, TimeUnit hours) throws InterruptedException{
 			return this.latch.await(i, hours);
 			
-		}
-
-		public String getMessage() {
-			return message;
-		}
-
-		public void setMessage(String message) {
-			this.message = message;
 		}
 }

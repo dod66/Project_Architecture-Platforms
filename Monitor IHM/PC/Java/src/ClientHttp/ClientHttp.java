@@ -78,7 +78,7 @@ public class ClientHttp extends Thread {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		//Auto-generated method stub
+		// TODO Auto-generated method stub
 		ClientHttp connect = new ClientHttp();
 		connect.sendGet();
 		connect.run(); //Run server connection		

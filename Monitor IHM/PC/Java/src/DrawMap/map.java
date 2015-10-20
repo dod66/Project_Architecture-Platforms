@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
 
-class map extends JFrame{
+public class map extends JFrame{
 
     /**
 	 * 
@@ -19,23 +19,24 @@ class map extends JFrame{
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         frame.setVisible(true);
         
-        setSize(450,450);
-        
-        JButton button =new JButton("press");
-        panel.add(button);
-        
-        
-    }
-
-    public void paint(Graphics g) {
-    	//System.out.println(MAXIMIZED_BOTH);
+      //System.out.println(MAXIMIZED_BOTH);
         Dimension size = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         double width_frame = size.getWidth();
         double height_frame = size.getHeight();
         int width_frame_int = (int)width_frame;
         int height_frame_int = (int)height_frame;
         System.out.println(width_frame_int+"x"+height_frame_int);
-    	
+        
+        setSize(width_frame_int,height_frame_int);
+        
+//        JButton button =new JButton("press");
+//        panel.add(button);
+        
+        
+    }
+
+    public void paint(Graphics g) {
+   	
         super.paint(g);
         Graphics2D g2 = (Graphics2D) g;
         Line2D lin = new Line2D.Float(100, 100, 250, 260);
