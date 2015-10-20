@@ -1,0 +1,6 @@
+framework module Pods_CabPrj2 {
+  umbrella header "Pods-CabPrj2-umbrella.h"
+
+  export *
+  module * { export * }
+}

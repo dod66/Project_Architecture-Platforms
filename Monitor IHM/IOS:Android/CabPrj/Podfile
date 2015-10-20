@@ -1,0 +1,7 @@
+use_frameworks!
+platform :ios, "9.0"
+pod "SocketRocket"
+
+target 'CabPrj' do
+  pod 'Starscream', '~> 1.0'
+end
