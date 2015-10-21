@@ -248,9 +248,7 @@ class SimpleEcho(WebSocket):
             # the destination become the start
             start = destination
 
-        
 
-        
         # si ce n est pas Galileo (un Monitor)
         else:    
             print('Message from the Monitor')
@@ -261,17 +259,6 @@ class SimpleEcho(WebSocket):
             trameGalileo = json.dumps(infos)
             data = unicode(trameGalileo)
             
-            
-
-##            
-##            envoi = json.dumps(carte)
-##            data = unicode(envoi)
-##            self.data = data
-##            self.sendMessage(self.data)
-            # parse JSON for obtain street
-            # do the parse
-            # Enfile(x)
-
 
     def handleConnected(self):
         print (self.address, 'connected')
@@ -301,30 +288,6 @@ class SimpleEcho(WebSocket):
             data = unicode(essai)
             self.data = data
             self.sendMessage(self.data)
-
-            
-##            if number == 0:
-##                #send "Quartier Nord"
-##                print('First quartier')
-##                envoi = json.dumps(carte)
-##                data = unicode(envoi)
-##                self.data = data
-##                self.sendMessage(self.data)
-##                number+=1
-##            elif number == 1:
-##                # send "Quartir Sud"
-##                print ('Second Quartier')
-##                envoi = json.dumps(carte)
-##                data = unicode(envoi)
-##                self.data = data
-##                self.sendMessage(self.data)
-##                number+=1
-##            elif number > 1:
-##                print('error too many clients')
-##                handleClose()
-
-            
-            
 
     def handleClose(self):
         print (self.address, 'closed')
