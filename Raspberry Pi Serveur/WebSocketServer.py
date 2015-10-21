@@ -3,11 +3,11 @@ import json
 from SimpleWebSocketServer import *
 
 
-# message to the CAB
+# message to the CAB actualy not use in the programm
 secondtry = "{\"rootObject\":{\"cabInfo\":{\"odometer\":\"16166\",\"destination\":\"None\",\"loc_now\":\"None\",\"loc_prior\":\"oki\"}}}"
 
 
-# the MAP 
+# the MAP in JSON
 essai = "{\"areas\":[{\"name\":\"Quartier Nord\",\"map\":{\"weight\":{\"w\":\"1\",\"h\":\"1\"},\"vertices\":[{\"name\":\"m\",\"x\": \"0.5\",\"y\":\"0.5\"},{\"name\":\"b\",\"x\": \"0.5\",\"y\":\"1\"}],\"streets\":[{\"name\":\"mb\",\"path\":[\"m\",\"b\"],\"oneway\":\"false\"}],\"bridges\":[{\"from\":\"b\",\"to\":{\"area\":\"Quartier Sud\",\"vertex\":\"h\"},\"weight\":\"2\"}]}},{\"name\":\"Quartier Sud\",\"map\":{\"weight\":{\"w\":\"1\",\"h\":\"1\"}\"vertices\":[{\"name\":\"a\",\"x\":\"1\",\"y\":\"1\"},{\"name\":\"n\",\"x\":\"0\",\"y\":\"1\"},{\"name\": \"h\",\"x\": \"0.5\",\"y\":\"0\"}],\"streets\":[{\"name\": \"ah\",\"path\":[\"a\",\"h\"],\"oneway\": \"false\"},{\"name\": \"nh\",\"path\": [\"n\",\"h\"],\"oneway\":\"false\"}],\"bridges\":[{\"from\":\"h\",\"to\":{\"area\":\"Quartier Nord\",\"vertex\":\"b\"},\"weight\":\"2\"}]}}]}"
 
 
@@ -19,58 +19,55 @@ g = {'m' : {'b' : 1},
      'n' : {'h' : 1}}
 
 
-carte = json.dumps(essai)
-taxi = json.loads(theCab)
-
 # Galileo address
 Galileo = None
 # array of Monitor address
 Monitor = []
 # array for the file
 file = []
-
+# the first top where is the Cab
 start = 'm'
-
 #for the odometer
 number = 0
-
+# for the number of destination "waiting" 
 wait = 0
 
 class SimpleEcho(WebSocket):
 
+     # function to print the best path
     def affiche_peres(self,pere,depart,extremite,trajet):
-
         if extremite == depart:
             return [depart] + trajet
         else:
             return (affiche_peres(pere, depart, pere[extremite], [extremite] + trajet))
 
+     # function to find the best path in the graphe
     def plus_court(self, graphe,etape,fin,visites,dist,pere,depart):
-        
-        # si on arrive a la fin, on affiche la distance et les peres
+        # f we arrive at the end ,  displays fathers
         if etape == fin:
            return affiche_peres(pere,depart,fin,[])
-        # si premiere visite, c est que l etape actuelle est le depart : on met dist[etape] a 0
+        # if first visite, it is this step is the first : we put dist[etape] to 0
         if  len(visites) == 0 : dist[etape]=0
-        # on commence a tester les voisins non visites
+        # we begin to test the non visits neighbors
         for voisin in graphe[etape]:
             if voisin not in visites:
-                # la distance est soit la distance calculee precedemment soit l'infini
+                # distance is the calculated distance or the infinity
                 dist_voisin = dist.get(voisin,float('inf'))
-                # on calcule la nouvelle distance calculee en passant par l etape
+                # calculate the new distance through the step
                 candidat_dist = dist[etape] + graphe[etape][voisin]
-                # on effectue les changements si cela donne un chemin plus court
+                # changing if the path is shorter
                 if candidat_dist < dist_voisin:
                     dist[voisin] = candidat_dist
                     pere[voisin] = etape
-        # on a regarde tous les voisins : le noeud entier est visite
+        # we look at all the neighbors: the entire node is visit
         visites.append(etape)
-        # on cherche le sommet *non visite* le plus proche du depart
+        # finding the top "not visiting" nearest departure
         non_visites = dict((s, dist.get(s,float('inf'))) for s in graphe if s not in visites)
         noeud_plus_proche = min(non_visites, key = non_visites.get)
-        # on applique recursivement en prenant comme nouvelle etape le sommet le plus proche 
+        # recursively applying new stage taking the nearest top 
         return plus_court(graphe,noeud_plus_proche,fin,visites,dist,pere,depart)
      
+     # the "main" of Dijsktra algorithm
     def dij_rec(self, graphe,debut,fin):
         return plus_court(graphe,debut,fin,[],{},{},debut)
 
@@ -80,19 +77,19 @@ class SimpleEcho(WebSocket):
         print('i fill the file')
         file.append(self.data)
         
-     # for defile the file
+     # for pop the first element in the file
     def Defile(self):
         print('i defile the file')
         file.pop(0)
 
-     # to create CabInfo for Galileo
+     # to create JSON CabInfo for Galileo
     def createCab(self, number, loc, destination, wait):
         print ('cab creation')
         a = {}
         a["name"] = "m"
         a["x"] = 0.5
         a["y"] = 0.5
-
+        
         infos = {}
         rootObject = {}
         cabInfo = {}
@@ -100,9 +97,7 @@ class SimpleEcho(WebSocket):
         cabInfo["destination"] = destination
         cabInfo["loc_now"] = a
         cabInfo["loc_prior"] = wait
-        
         rootObject["cabInfo"] = cabInfo
-
         infos["rootObject"] = rootObject
         return infos
 
