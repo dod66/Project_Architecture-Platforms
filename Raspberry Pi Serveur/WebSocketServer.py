@@ -91,14 +91,12 @@ class SimpleEcho(WebSocket):
         a["y"] = 0.5
         
         infos = {}
-        rootObject = {}
         cabInfo = {}
         cabInfo["odometer"] = number
         cabInfo["destination"] = destination
         cabInfo["loc_now"] = a
         cabInfo["loc_prior"] = wait
-        rootObject["cabInfo"] = cabInfo
-        infos["rootObject"] = rootObject
+        infos["cabInfo"] = cabInfo
         return infos
 
 
