@@ -11,7 +11,7 @@ secondtry = "{\"rootObject\":{\"cabInfo\":{\"odometer\":\"16166\",\"destination\
 essai = "{\"areas\":[{\"name\":\"Quartier Nord\",\"map\":{\"weight\":{\"w\":\"1\",\"h\":\"1\"},\"vertices\":[{\"name\":\"m\",\"x\": \"0.5\",\"y\":\"0.5\"},{\"name\":\"b\",\"x\": \"0.5\",\"y\":\"1\"}],\"streets\":[{\"name\":\"mb\",\"path\":[\"m\",\"b\"],\"oneway\":\"false\"}],\"bridges\":[{\"from\":\"b\",\"to\":{\"area\":\"Quartier Sud\",\"vertex\":\"h\"},\"weight\":\"2\"}]}},{\"name\":\"Quartier Sud\",\"map\":{\"weight\":{\"w\":\"1\",\"h\":\"1\"}\"vertices\":[{\"name\":\"a\",\"x\":\"1\",\"y\":\"1\"},{\"name\":\"n\",\"x\":\"0\",\"y\":\"1\"},{\"name\": \"h\",\"x\": \"0.5\",\"y\":\"0\"}],\"streets\":[{\"name\": \"ah\",\"path\":[\"a\",\"h\"],\"oneway\": \"false\"},{\"name\": \"nh\",\"path\": [\"n\",\"h\"],\"oneway\":\"false\"}],\"bridges\":[{\"from\":\"h\",\"to\":{\"area\":\"Quartier Nord\",\"vertex\":\"b\"},\"weight\":\"2\"}]}}]}"
 
 
-# le graphe résultant de la MAP
+# le graphe resultant de la MAP
 g = {'m' : {'b' : 1},
      'b' : {'m' : 1, 'h' : 1},
      'h' : {'b' : 1, 'a' : 1, 'n' : 1},
@@ -50,25 +50,25 @@ class SimpleEcho(WebSocket):
         # si on arrive a la fin, on affiche la distance et les peres
         if etape == fin:
            return affiche_peres(pere,depart,fin,[])
-        # si c'est la première visite, c'est que l etape actuelle est le départ : on met dist[etape] a 0
+        # si premiere visite, c est que l etape actuelle est le depart : on met dist[etape] a 0
         if  len(visites) == 0 : dist[etape]=0
-        # on commence à tester les voisins non visités
+        # on commence a tester les voisins non visites
         for voisin in graphe[etape]:
             if voisin not in visites:
-                # la distance est soit la distance calculée précédemment soit l'infini
+                # la distance est soit la distance calculee precedemment soit l'infini
                 dist_voisin = dist.get(voisin,float('inf'))
-                # on calcule la nouvelle distance calculée en passant par l'étape
+                # on calcule la nouvelle distance calculee en passant par l etape
                 candidat_dist = dist[etape] + graphe[etape][voisin]
                 # on effectue les changements si cela donne un chemin plus court
                 if candidat_dist < dist_voisin:
                     dist[voisin] = candidat_dist
                     pere[voisin] = etape
-        # on a regardé tous les voisins : le noeud entier est visité
+        # on a regarde tous les voisins : le noeud entier est visite
         visites.append(etape)
-        # on cherche le sommet *non visité* le plus proche du départ
+        # on cherche le sommet *non visite* le plus proche du depart
         non_visites = dict((s, dist.get(s,float('inf'))) for s in graphe if s not in visites)
         noeud_plus_proche = min(non_visites, key = non_visites.get)
-        # on applique récursivement en prenant comme nouvelle étape le sommet le plus proche 
+        # on applique recursivement en prenant comme nouvelle etape le sommet le plus proche 
         return plus_court(graphe,noeud_plus_proche,fin,visites,dist,pere,depart)
      
     def dij_rec(self, graphe,debut,fin):
