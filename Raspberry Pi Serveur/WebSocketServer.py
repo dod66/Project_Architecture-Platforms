@@ -6,17 +6,6 @@ from SimpleWebSocketServer import *
 # la trame du TAXI
 secondtry = "{\"rootObject\":{\"cabInfo\":{\"odometer\":\"16166\",\"destination\":\"None\",\"loc_now\":\"None\",\"loc_prior\":\"oki\"}}}"
 
-theCab = """{
-    "rootObject": {
-        "cabInfo": {
-            "odometer": "16166",
-            "destination": "None",
-            "loc_now": "None",
-            "loc_prior": "oki"
-        }
-    }
-}"""
-
 
 # notre MAP 
 essai = "{\"areas\":[{\"name\":\"Quartier Nord\",\"map\":{\"weight\":{\"w\":\"1\",\"h\":\"1\"},\"vertices\":[{\"name\":\"m\",\"x\": \"0.5\",\"y\":\"0.5\"},{\"name\":\"b\",\"x\": \"0.5\",\"y\":\"1\"}],\"streets\":[{\"name\":\"mb\",\"path\":[\"m\",\"b\"],\"oneway\":\"false\"}],\"bridges\":[{\"from\":\"b\",\"to\":{\"area\":\"Quartier Sud\",\"vertex\":\"h\"},\"weight\":\"2\"}]}},{\"name\":\"Quartier Sud\",\"map\":{\"weight\":{\"w\":\"1\",\"h\":\"1\"}\"vertices\":[{\"name\":\"a\",\"x\":\"1\",\"y\":\"1\"},{\"name\":\"n\",\"x\":\"0\",\"y\":\"1\"},{\"name\": \"h\",\"x\": \"0.5\",\"y\":\"0\"}],\"streets\":[{\"name\": \"ah\",\"path\":[\"a\",\"h\"],\"oneway\": \"false\"},{\"name\": \"nh\",\"path\": [\"n\",\"h\"],\"oneway\":\"false\"}],\"bridges\":[{\"from\":\"h\",\"to\":{\"area\":\"Quartier Nord\",\"vertex\":\"b\"},\"weight\":\"2\"}]}}]}"
@@ -33,7 +22,6 @@ g = {'m' : {'b' : 1},
 carte = json.dumps(essai)
 taxi = json.loads(theCab)
 
-##test = 1
 # Galileo address
 Galileo = None
 # array of Monitor address
@@ -50,14 +38,12 @@ wait = 0
 
 class SimpleEcho(WebSocket):
 
-
     def affiche_peres(self, pere,depart,extremite,trajet):
 
         if extremite == depart:
             return [depart] + trajet
         else:
             return (affiche_peres(pere, depart, pere[extremite], [extremite] + trajet))
-
 
     def plus_court(self, graphe,etape,fin,visites,dist,pere,depart):
         
@@ -89,15 +75,15 @@ class SimpleEcho(WebSocket):
         return plus_court(graphe,debut,fin,[],{},{},debut)
 
     def theFile(self):
+        # no use function
         print('i prepare the file')
 
-    #attention x est une liste en x, y et le nom d une street
+    #add an element to the file
     def Enfile(self):
         print('i fill the file')
         file.append(self.data)
         
 
-    
     def Defile(self):
         print('i defile the file')
         file.pop(0)
@@ -122,8 +108,6 @@ class SimpleEcho(WebSocket):
         infos["rootObject"] = rootObject
         return infos
 
-        #voir comment mettre en place les infos utiles
-        
 
     def handleMessage(self):
         # echo message back to client
@@ -145,9 +129,15 @@ class SimpleEcho(WebSocket):
             print('Galileo says No')
             self.Defile()
             if file[0] != None:
-                data = unicode(file[0])
+##                data = unicode(file[0])
+##                self.data = data
+##                self.sendMessage(self.data)
+                
+                infos = self.createCab(number, start, destination, wait) 
+                trameGalileo = json.dumps(infos)
+                data = unicode(trameGalileo)
                 self.data = data
-                self.sendMessage(self.data)
+                
                 print('Envoi a Galileo une nouvelle demande')
             else:
                 print('La file est vide')
