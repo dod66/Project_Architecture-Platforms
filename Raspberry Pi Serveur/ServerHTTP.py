@@ -16,7 +16,7 @@ class TheServer(BaseHTTPRequestHandler):
     self.send_header('Content-type','text-html')
     self.end_headers()
     #send websocket address
-    if (self.client_address[0]) == "192.1681.215":
+    if (self.client_address[0]) == "192.168.1.215":
         self.wfile.write('{"IP":"192.1681.10","port":5000}\n')
     else :
         self.wfile.write('{"IP":"172.30.0.190","port":5000}\n')
