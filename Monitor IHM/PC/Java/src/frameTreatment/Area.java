@@ -5,19 +5,21 @@ public class Area {
 	private Map map;
 	//private ArrayList<Vertex> vertex;
 	
-	public Area(){
+	public Area(){ //Default constructor
 		
 	}
 	
-	public Area(String name, Map map){
+	public Area(String name, Map map){ //Constructor
 		this.name = name;
 		this.map = map;
 	}
 
 	@Override
-	public String toString() {
+	public String toString() { //Return structure
 		return "Area [name=" + name + ", map=" + map + "]";
 	}
+	
+	//Below : getters and setters
 
 	public String getName() {
 		return name;

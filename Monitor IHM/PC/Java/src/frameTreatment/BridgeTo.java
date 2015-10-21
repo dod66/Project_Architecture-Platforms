@@ -5,21 +5,23 @@ public class BridgeTo {
 	private String vertex;
 	private int weight;
 	
-	public BridgeTo(){
+	public BridgeTo(){ //Default constructor
 		
 	}
 	
-	public BridgeTo(String area, String vertex, int weight){
+	public BridgeTo(String area, String vertex, int weight){ //Constructor
 		this.area = area;
 		this.vertex = vertex;
 		this.weight = weight;
 	}
 	
 	@Override
-	public String toString() {
+	public String toString() { //return structure
 		return "BridgeTo [area=" + area + ", vertex=" + vertex + ", weight=" + weight + "]";
 	}
 
+	//Below : getters and setters
+	
 	public String getArea() {
 		return area;
 	}

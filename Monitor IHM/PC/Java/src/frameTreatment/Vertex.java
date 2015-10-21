@@ -6,11 +6,11 @@ public class Vertex {
 	private float x;
 	private float y;
 	
-	public Vertex(){
+	public Vertex(){ //Default constructor
 		
 	}
 	
-	public Vertex(String name, float x, float y){
+	public Vertex(String name, float x, float y){ //Constructor
 		this.setName(name);
 		this.setX(x);
 		this.setY(y);
@@ -18,8 +18,10 @@ public class Vertex {
 
 	@Override
 	public String toString() {
-		return "Vertex [name=" + name + ", x=" + x + ", y=" + y + "]";
+		return "Vertex [name=" + name + ", x=" + x + ", y=" + y + "]"; //return structure
 	}
+	
+	//Below : getters and setters
 
 	public String getName() {
 		return name;

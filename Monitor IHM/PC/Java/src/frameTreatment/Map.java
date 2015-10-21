@@ -8,21 +8,23 @@ public class Map {
 	private ArrayList<Streets> streets;
 	private ArrayList<Bridges> bridges;
 	
-	public Map(){
+	public Map(){ //Default Constructor
 		
 	}
 	
-	public Map(ArrayList<Vertex> vertices, ArrayList<Streets> streets, ArrayList<Bridges> bridges){
+	public Map(ArrayList<Vertex> vertices, ArrayList<Streets> streets, ArrayList<Bridges> bridges){ //constructor
 		this.vertices = vertices;
 		this.streets = streets;
 		this.bridges = bridges;
 	}
 
 	@Override
-	public String toString() {
+	public String toString() { //return structure
 		return "Map [weight=" + weight + ", vertices=" + vertices + ", streets=" + streets + ", bridges=" + bridges
 				+ "]";
 	}
+	
+	//Below : getters and setters
 
 	public Weight getWeight() {
 		return weight;

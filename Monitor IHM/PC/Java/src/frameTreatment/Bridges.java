@@ -5,22 +5,24 @@ public class Bridges {
 	private BridgeTo to;
 	private int weight;
 	
-	public Bridges(){
+	public Bridges(){ //Default Constructor
 		
 	}
 	
-	public Bridges(String from, BridgeTo to, int weight){
+	public Bridges(String from, BridgeTo to, int weight){ //Constructor
 		this.from = from;
 		this.to = to;
 		this.weight = weight;
 	}
 
 	@Override
-	public String toString() {
+	public String toString() { //Return Structure
 		return "Bridge [from=" + from + ", to=" + to + ", weight=" + weight + "]";
 	}
 
-	public String getFrom() {
+	//Below : getters and setters
+	
+	public String getFrom() { 
 		return from;
 	}
 
