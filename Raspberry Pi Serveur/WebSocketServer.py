@@ -3,15 +3,15 @@ import json
 from SimpleWebSocketServer import *
 
 
-# la trame du TAXI
+# message to the CAB
 secondtry = "{\"rootObject\":{\"cabInfo\":{\"odometer\":\"16166\",\"destination\":\"None\",\"loc_now\":\"None\",\"loc_prior\":\"oki\"}}}"
 
 
-# notre MAP 
+# the MAP 
 essai = "{\"areas\":[{\"name\":\"Quartier Nord\",\"map\":{\"weight\":{\"w\":\"1\",\"h\":\"1\"},\"vertices\":[{\"name\":\"m\",\"x\": \"0.5\",\"y\":\"0.5\"},{\"name\":\"b\",\"x\": \"0.5\",\"y\":\"1\"}],\"streets\":[{\"name\":\"mb\",\"path\":[\"m\",\"b\"],\"oneway\":\"false\"}],\"bridges\":[{\"from\":\"b\",\"to\":{\"area\":\"Quartier Sud\",\"vertex\":\"h\"},\"weight\":\"2\"}]}},{\"name\":\"Quartier Sud\",\"map\":{\"weight\":{\"w\":\"1\",\"h\":\"1\"}\"vertices\":[{\"name\":\"a\",\"x\":\"1\",\"y\":\"1\"},{\"name\":\"n\",\"x\":\"0\",\"y\":\"1\"},{\"name\": \"h\",\"x\": \"0.5\",\"y\":\"0\"}],\"streets\":[{\"name\": \"ah\",\"path\":[\"a\",\"h\"],\"oneway\": \"false\"},{\"name\": \"nh\",\"path\": [\"n\",\"h\"],\"oneway\":\"false\"}],\"bridges\":[{\"from\":\"h\",\"to\":{\"area\":\"Quartier Nord\",\"vertex\":\"b\"},\"weight\":\"2\"}]}}]}"
 
 
-# le graphe resultant de la MAP
+# the graph from the MAP
 g = {'m' : {'b' : 1},
      'b' : {'m' : 1, 'h' : 1},
      'h' : {'b' : 1, 'a' : 1, 'n' : 1},
@@ -31,14 +31,14 @@ file = []
 
 start = 'm'
 
-#value for the number of Monitor connexion
+#for the odometer
 number = 0
 
 wait = 0
 
 class SimpleEcho(WebSocket):
 
-    def affiche_peres(self, pere,depart,extremite,trajet):
+    def affiche_peres(self,pere,depart,extremite,trajet):
 
         if extremite == depart:
             return [depart] + trajet
@@ -74,20 +74,18 @@ class SimpleEcho(WebSocket):
     def dij_rec(self, graphe,debut,fin):
         return plus_court(graphe,debut,fin,[],{},{},debut)
 
-    def theFile(self):
-        # no use function
-        print('i prepare the file')
 
     #add an element to the file
     def Enfile(self):
         print('i fill the file')
         file.append(self.data)
         
-
+     # for defile the file
     def Defile(self):
         print('i defile the file')
         file.pop(0)
 
+     # to create CabInfo for Galileo
     def createCab(self, number, loc, destination, wait):
         print ('cab creation')
         a = {}
@@ -124,7 +122,7 @@ class SimpleEcho(WebSocket):
 
         #print (json.loads(self.data))
 
-        # si on recoit un NO du Galileo
+        # if NO from Galileo
         if self.data == unicode('{"takePassenger":"No"}'):
             print('Galileo says No')
             self.Defile()
@@ -150,7 +148,7 @@ class SimpleEcho(WebSocket):
 
             
 
-        # si on recoit un YES de la part du Galileo    
+        # if YES from Galileo    
         elif self.data == unicode('{"takePassenger":"Yes"}'):
             print(' Galileo says Yes')
             number = 0
@@ -166,7 +164,7 @@ class SimpleEcho(WebSocket):
             destination = e["location"]
         
 
-            ####do resolve graph####
+            ####DO RESOLVE GRAPH####
             
             #first the list of vertex
             path = (g, start,destination)
@@ -217,12 +215,13 @@ class SimpleEcho(WebSocket):
                 data = unicode(toSend)
                 print('data :', toSend)
             
-            # send Message to all Monitor
+               # send Message to all Monitor
                 for i in Monitor:
                     Monitor[i].data = data
                     Monitor[i].sendMessage(Monitor[i].data)
+                    
+                    
                 #send Message to the Galileo
-
                 number = number + 1
                 infos = self.createCab(number, start, destination, wait) 
                 trameGalileo = json.dumps(infos)
@@ -249,7 +248,7 @@ class SimpleEcho(WebSocket):
             start = destination
 
 
-        # si ce n est pas Galileo (un Monitor)
+        # if is a Monitor
         else:    
             print('Message from the Monitor')
 
