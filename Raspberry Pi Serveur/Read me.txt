@@ -12,5 +12,7 @@ sudo pip install git+https://github.com/dpallot/simple-websocket-server.git
 
 or by download the repository locate at this address : 
 https://github.com/dpallot/simple-websocket-server
-
 You have all the documentation on the previous link.
+
+for the graph treatement, i modified the method realise on this WebSite : 
+http://informathix.tuxfamily.org/?q=node/119
