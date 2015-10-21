@@ -6,6 +6,7 @@
 //  Copyright © 2015 Gnd Industry. All rights reserved.
 //
 //  In this source we used Starscream Library : https://github.com/daltoniam/Starscream
+//  In this source we used SwiftyJSON Library : https://github.com/SwiftyJSON/SwiftyJSON
 //
 
 import UIKit
@@ -14,7 +15,7 @@ import SwiftyJSON
 
 class ViewController: UIViewController{
     
-    let myConnection = Connection()
+    let myConnection = Connection() //init connection
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -16,7 +16,7 @@ class Connection: WebSocketDelegate{
     var message : String = ""
 
     func connectionWS(){
-    let socket = WebSocket(url: NSURL(string: "ws://172.30.0.190:5000")!) //Enter WS adress
+    let socket = WebSocket(url: NSURL(string: "ws://172.30.0.190:5000")!) //get WS adress from HTTP server
     socket.delegate = self //event
     socket.connect() //socket connection
     socket.writeString("test") //send message to the server
@@ -37,11 +37,11 @@ func websocketDidReceiveMessage(socket: WebSocket, text: String) {
     self.message=text
     
     
-    if let test = self.message.dataUsingEncoding(NSUTF8StringEncoding)
+    if let test = self.message.dataUsingEncoding(NSUTF8StringEncoding) 
     {
         let json = JSON(data: test)
         //print(json)
-        let taille = json["map"]["vertices"].count
+        let taille = json["map"]["vertices"].count //check map and vertices in frames
         print(taille)
     }
 }

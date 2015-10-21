@@ -128,12 +128,12 @@
 			isa = PBXGroup;
 			children = (
 				A52FE01D1BD532E300D65690 /* AppDelegate.swift */,
+				A552A31B1BD795DE004CDDAE /* Connection.swift */,
 				A52FE01F1BD532E300D65690 /* ViewController.swift */,
 				A52FE0211BD532E300D65690 /* Main.storyboard */,
 				A52FE0241BD532E300D65690 /* Assets.xcassets */,
 				A52FE0261BD532E300D65690 /* LaunchScreen.storyboard */,
 				A52FE0291BD532E300D65690 /* Info.plist */,
-				A552A31B1BD795DE004CDDAE /* Connection.swift */,
 			);
 			path = CabPrj2;
 			sourceTree = "<group>";
