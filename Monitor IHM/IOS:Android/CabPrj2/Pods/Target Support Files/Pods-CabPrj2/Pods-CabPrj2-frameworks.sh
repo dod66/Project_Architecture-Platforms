@@ -85,9 +85,11 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-CabPrj2/SocketRocket.framework"
+  install_framework "Pods-CabPrj2/SwiftyJSON.framework"
   install_framework "Pods-CabPrj2/Starscream.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-CabPrj2/SocketRocket.framework"
+  install_framework "Pods-CabPrj2/SwiftyJSON.framework"
   install_framework "Pods-CabPrj2/Starscream.framework"
 fi

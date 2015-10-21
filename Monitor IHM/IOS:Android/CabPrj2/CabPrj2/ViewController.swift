@@ -5,15 +5,21 @@
 //  Created by Remi Gandou on 19/10/2015.
 //  Copyright © 2015 Gnd Industry. All rights reserved.
 //
+//  In this source we used Starscream Library : https://github.com/daltoniam/Starscream
+//
 
 import UIKit
 import Starscream
+import SwiftyJSON
 
-class ViewController: UIViewController, WebSocketDelegate {
+class ViewController: UIViewController{
+    
+    let myConnection = Connection()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        super.viewDidLoad()
     }
 
     override func didReceiveMemoryWarning() {
@@ -21,33 +27,8 @@ class ViewController: UIViewController, WebSocketDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func connection(sender: UIButton) {
-        connectionWS()
-        print("method launched")
+    @IBAction func connection(sender: UIButton) { //Button 'Connection' Action
+        print("#Function Launched") //print for debug
+        myConnection.connectionWS() //Launch function connectionWS
     }
-    
-    func connectionWS(){
-        let socket = WebSocket(url: NSURL(string: "ws://172.30.0.190:5000")!)
-        socket.delegate = self
-        socket.connect()
-        socket.writeString("Hi Server!")
-    }
-
-    func websocketDidConnect(socket: WebSocket) {
-        print("websocket is connected")
-    }
-    
-    func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
-        print("websocket is disconnected: \(error?.localizedDescription)")
-    }
-    
-    func websocketDidReceiveMessage(socket: WebSocket, text: String) {
-        print("got some text: \(text)")
-    }
-    
-    func websocketDidReceiveData(socket: WebSocket, data: NSData) {
-        print("got some data: \(data.length)")
-    }
-    
 }
-

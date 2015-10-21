@@ -15,6 +15,7 @@
 		A52FE0281BD532E300D65690 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A52FE0261BD532E300D65690 /* LaunchScreen.storyboard */; };
 		A52FE0331BD532E300D65690 /* CabPrj2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52FE0321BD532E300D65690 /* CabPrj2Tests.swift */; };
 		A52FE03E1BD532E300D65690 /* CabPrj2UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52FE03D1BD532E300D65690 /* CabPrj2UITests.swift */; };
+		A552A31C1BD795DE004CDDAE /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A552A31B1BD795DE004CDDAE /* Connection.swift */; settings = {ASSET_TAGS = (); }; };
 		E0FBFAAD96AD1C8695C81DC8 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7464CD8A67878969B17BA77D /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +54,7 @@
 		A52FE0391BD532E300D65690 /* CabPrj2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CabPrj2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A52FE03D1BD532E300D65690 /* CabPrj2UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CabPrj2UITests.swift; sourceTree = "<group>"; };
 		A52FE03F1BD532E300D65690 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A552A31B1BD795DE004CDDAE /* Connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 				A52FE0241BD532E300D65690 /* Assets.xcassets */,
 				A52FE0261BD532E300D65690 /* LaunchScreen.storyboard */,
 				A52FE0291BD532E300D65690 /* Info.plist */,
+				A552A31B1BD795DE004CDDAE /* Connection.swift */,
 			);
 			path = CabPrj2;
 			sourceTree = "<group>";
@@ -341,6 +344,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A52FE0201BD532E300D65690 /* ViewController.swift in Sources */,
+				A552A31C1BD795DE004CDDAE /* Connection.swift in Sources */,
 				A52FE01E1BD532E300D65690 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

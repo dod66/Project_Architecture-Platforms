@@ -22,7 +22,6 @@
                                 <state key="normal" title="Connection"/>
                                 <connections>
                                     <action selector="connection:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lDv-6j-L0d"/>
-                                    <segue destination="Kua-C3-Rel" kind="show" id="lIH-uy-7cM"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Welcome in CabPrj2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RyN-xH-kMs">
