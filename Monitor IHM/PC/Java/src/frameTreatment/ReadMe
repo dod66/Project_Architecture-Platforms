@@ -1,0 +1,13 @@
+######################
+########README########
+######################
+####JSON TREATMENT####
+######################
+
+#This part was developed thank's to Jackson Library
+
+When the client received the frame from server, the json treatement must parse it.
+
+The littlest part of the frame is treated, and we excute it, until the entire area.
+
+Each part, has it proper java class.
