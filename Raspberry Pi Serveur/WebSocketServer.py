@@ -108,99 +108,84 @@ class SimpleEcho(WebSocket):
 
 
     def handleMessage(self):
-        # echo message back to client
-
+        # Message receive by a client, this fonction is the head of my programm
         print ('je recois des infos')
         print (self.data)
-
-        toMonitor = {}
-        cabRequest = {}
-        loc = {}
-        location = {}
-        
-        
-
-        #print (json.loads(self.data))
 
         # if NO from Galileo
         if self.data == unicode('{"takePassenger":"No"}'):
             print('Galileo says No')
+            # i pop the first element in my file
             self.Defile()
+            # i look if my file have another request and i send it to Galileo
             if file[0] != None:
-##                data = unicode(file[0])
-##                self.data = data
-##                self.sendMessage(self.data)
-                
                 infos = self.createCab(number, start, destination, wait) 
                 trameGalileo = json.dumps(infos)
                 data = unicode(trameGalileo)
                 self.data = data
-                
-                print('Envoi a Galileo une nouvelle demande')
+                print('Envoi a Galileo une nouvelle demande de destination')
             else:
                 print('La file est vide')
-                
-##            # test envoi trame JSON
-##            data = unicode(secondtry)
-##            self.data = data
-##            self.sendMessage(Galileo.data)
-##            print('le message a bien ete envoye')
-
-            
 
         # if YES from Galileo    
         elif self.data == unicode('{"takePassenger":"Yes"}'):
             print(' Galileo says Yes')
-            number = 0
-            #you have to kown the cab position and where he goes
-
+            number = 0  # number is for the odometer, for each destination odometer is reset.
+            
+            # i find the destination of the Cab when i parse the JSON send by a Monitor
             var = file[0]
             a = var.data
             b = a["cabRequest"]
             c = b[0]
             d = c["location"]
             e = d[0]
-            
-            destination = e["location"]
-        
-
+            destination = e["location"]  # this is the destination
+      
             ####DO RESOLVE GRAPH####
-            
-            #first the list of vertex
-            path = (g, start,destination)
+            path = (g, start,destination)  # path is a array of point 
 
-            
-            #send each vertex to the Monitor
+             ### CREATE THE JSON ###
+             # for the creation of the JSON
+             toMonitor = {}
+             cabRequest = {}
+             loc = {}
+             location = {}
+             
+             # for each point, i create a json who was sending to the monitors and another sending to the Galileo
             for i in len(path):
-
+               
                 if path[i] == 'm':
                     print('go Quartir Nord, to the vertex m')
                     cabRequest["area"] = "Quartier-Nord"
                     loc["area"] = "Quartier-Nord"
- 
                     
                     #say it's on the Quartir Nord, to the vertex m
                 elif path[i] == 'b':
                     #say it's on the Quartier Nord, to the vertex b
                     print('go Quartir Nord, to the vertex b')
                     cabRequest["area"] = "Quartier-Nord"
+                    loc["area"] = "Quartier-Nord"
                 elif path[i] == 'h':
                     # say it's on the Quartier Sud, to the vertax h
                     print('go Quartir Sud, to the vertex h')
                     cabRequest["area"] = "Quartier-Sud"
+                    loc["area"] = "Quartier-Sud"
                 elif path[i] == 'a':
                     #say it's on the Quartier Sud, to the vertex a
                     print('go Quartir Sud, to the vertex a')
                     cabRequest["area"] = "Quartier-Sud"
+                    loc["area"] = "Quartier-Sud"
                 elif path[i] == 'n':
                     #say it's on the Quartier Sud, to the vertex n
                     print('go Quartir Sud, to the vertex n')
                     cabRequest["area"] = "Quartier-Sud"
+                    loc["area"] = "Quartier-Sud"
                 else :
                     #it's a mistake
                     print('fail')
 
-                # create JSON
+                ### CREATE THE JSON FOR THE MONITOR ###
+                
                 
                 loc["locationType"] = "vertex"
                 location["from"] = start
@@ -220,8 +205,7 @@ class SimpleEcho(WebSocket):
                     Monitor[i].data = data
                     Monitor[i].sendMessage(Monitor[i].data)
                     
-                    
-                #send Message to the Galileo
+                ### CREATE THE JSON MESSAGE FOR THE GALILEO ###
                 number = number + 1
                 infos = self.createCab(number, start, destination, wait) 
                 trameGalileo = json.dumps(infos)
@@ -233,9 +217,9 @@ class SimpleEcho(WebSocket):
             ###### END OF THE FOR ######        
             # when the message is send, defill the fill
             self.Defile()
+            # decrease the number of people waiting
             wait = wait -1    
                 
-            
             if file[0] != None:
                 data = unicode(file[0])
                 self.data = data
@@ -246,51 +230,38 @@ class SimpleEcho(WebSocket):
 
             # the destination become the start
             start = destination
-
-
+            
         # if is a Monitor
         else:    
             print('Message from the Monitor')
-
             self.Enfile()
-            wait = wait +1
-            infos = self.createCab(0, start, None, wait) 
-            trameGalileo = json.dumps(infos)
-            data = unicode(trameGalileo)
+            if trameGalileo != None:
+                wait = wait +1
+                infos = self.createCab(0, start, None, wait) 
+                trameGalileo = json.dumps(infos)
+                data = unicode(trameGalileo)
             
-
     def handleConnected(self):
         print (self.address, 'connected')
         affiche = self.address
-        print (affiche[0])
-        #print (affiche)
-        
-
+          # i compare the IP address to know who start the connexion 
         if affiche[0] == ('192.168.1.215'):
             print('Galileo is connected')
-
-            #cabInf = self.createCab()
             Galileo = self
-
-            
         else :
             
-            print('send Message to Monitor')
-            #Monitor.append(self)
-            #print(number)
-
-            #print('First quartier')
-            #envoi = json.loads(carte)
-            #envoi = json.dumps(essai)
-
+            print('Monitor connected')
+            # i put Monitor info in a array
+            Monitor.append(self)
             # SEND THE MAP TO MONITOR#
             data = unicode(essai)
             self.data = data
             self.sendMessage(self.data)
-
+            
+     #close the connexion
     def handleClose(self):
         print (self.address, 'closed')
 
-
+### THE MAIN ###
 server = SimpleWebSocketServer('0.0.0.0', 5000, SimpleEcho)
 server.serveforever()
