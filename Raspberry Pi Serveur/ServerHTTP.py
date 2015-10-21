@@ -1,7 +1,5 @@
 #!/usr/bin/python
 
-#!/usr/bin/python
-
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import os
  
