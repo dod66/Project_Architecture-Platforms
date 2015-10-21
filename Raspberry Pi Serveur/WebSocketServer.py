@@ -140,11 +140,11 @@ class SimpleEcho(WebSocket):
             path = (g, start,destination)  # path is a array of point 
 
              ### CREATE THE JSON ###
-             # for the creation of the JSON
-             toMonitor = {}
-             cabRequest = {}
-             loc = {}
-             location = {}
+            # for the creation of the JSON
+            toMonitor = {}
+            cabRequest = {}
+            loc = {}
+            location = {}
              
              # for each point, i create a json who was sending to the monitors and another sending to the Galileo
             for i in len(path):
