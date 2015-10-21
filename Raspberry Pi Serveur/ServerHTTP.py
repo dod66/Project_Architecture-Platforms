@@ -1,24 +1,35 @@
-import BaseHTTPServer
-import CGIHHTPServer
+#!/usr/bin/python
 
-PORT = 5000
-server_address = ('0.0.0.0", PORT)
+#!/usr/bin/python
 
-server = BaseHTTPServer.HTTPServer
-handler = CGIHHTPServer.CGIHHTPRequestHandler
-handler.cgi_directories = ["/"]
-print "Serveur actif sur le port : ", PORT
+from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+import os
+ 
+#Create custom HTTPRequestHandler class
+class TheServer(BaseHTTPRequestHandler):
+  
+  #handle GET command
+  def do_GET(self):
+   
+    #send code 200 response
+    self.send_response(200)
 
-
-def do_GET(self):
-    self.send_header('Content-type', 'text-html')
-    self.end-header()
-    self.wfile.write('ws://172.30.0.190:6000')
+    #send header first
+    self.send_header('Content-type','text-html')
+    self.end_headers()
+    #send websocket address
+    if (self.client_address[0]) == "192.1681.215":
+        self.wfile.write('{"IP":"192.1681.10","port":5000}\n')
+    else :
+        self.wfile.write('{"IP":"172.30.0.190","port":5000}\n')
     return
-
-def run():
-    httpd = server(server_address, PORT)
-    httpd.serve_forever()
-
-if __name__ == '__main__' :
-    run()
+  
+def run(address):
+  print('http server is starting on :'+address)
+  server_address = (address, 8090)
+  httpd = HTTPServer(server_address, TheServer)
+  print('http server is running...')
+  httpd.serve_forever()
+  
+if __name__ == '__main__':
+  run("0.0.0.0")
