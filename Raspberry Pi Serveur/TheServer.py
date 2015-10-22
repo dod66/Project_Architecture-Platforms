@@ -77,11 +77,13 @@ class SimpleEcho(WebSocket):
     #add an element to the file
     def Enfile(self):
         print('i fill the file')
+        global file
         file.append(self.data)
         
      # for pop the first element in the file
     def Defile(self):
         print('i defile the file')
+        global file
         file.pop(0)
 
      # to create JSON CabInfo for Galileo
@@ -92,7 +94,6 @@ class SimpleEcho(WebSocket):
         a["x"] = 0.5
         a["y"] = 0.5
         
-        infos = {}
         rootObject = {}
         cabInfo = {}
         cabInfo["odometer"] = number
@@ -100,8 +101,8 @@ class SimpleEcho(WebSocket):
         cabInfo["loc_now"] = a
         cabInfo["loc_prior"] = wait
         rootObject["cabInfo"] = cabInfo
-        infos["rootObject"] = rootObject
-        return infos
+        
+        return rootObject
 
 
     def handleMessage(self):
@@ -115,6 +116,7 @@ class SimpleEcho(WebSocket):
             # i pop the first element in my file
             self.Defile()
             # i look if my file have another request and i send it to Galileo
+            global file
             if file[0] != None:
                 infos = self.createCab(number, start, destination, wait) 
                 trameGalileo = json.dumps(infos)
@@ -130,17 +132,23 @@ class SimpleEcho(WebSocket):
             number = 0  # number is for the odometer, for each destination odometer is reset.
             
             # i find the destination of the Cab when i parse the JSON send by a Monitor
-            var = file[0]
-            a = var.data
-            b = a["cabRequest"]
-            c = b[0]
-            d = c["location"]
-            e = d[0]
-            destination = e["location"]  # this is the destination
-      
+            global file
+            if file[0] != None:
+                var = file[0]
+                a = var.data
+                b = a["cabRequest"]
+                c = b[0]
+                d = c["location"]
+                e = d[0]
+                destination = e["location"]  # this is the destination
+            else :
+                print('the file is empty') 
             ####DO RESOLVE GRAPH####
+            print('resolve graph')
+            global start, g
             path = resolution.dij_rec(g, start,destination)  # path is a array of point 
-
+            print(path)
+            
              ### CREATE THE JSON ###
              # for the creation of the JSON
             toMonitor = {}
@@ -149,7 +157,7 @@ class SimpleEcho(WebSocket):
             location = {}
              
              # for each point, i create a json who was sending to the monitors and another sending to the Galileo
-            for i in len(path):
+            for i in range(len(path)):
                
                 if path[i] == 'm':
                     print('go Quartir Nord, to the vertex m')
@@ -195,10 +203,11 @@ class SimpleEcho(WebSocket):
 
                 toSend = json.dumps(toMonitor)
                 data = unicode(toSend)
-                print('data :', toSend)
+                print(toSend)
             
                # send Message to all Monitor
-                for i in Monitor:
+               global Monitor
+                for i in range(len(Monitor)):
                     Monitor[i].data = data
                     Monitor[i].sendMessage(Monitor[i].data)
                     
@@ -209,14 +218,16 @@ class SimpleEcho(WebSocket):
                 data = unicode(trameGalileo)
                 self.data = data
                 
-                Galileo.sendMessage(self.data)      # technicaly it is Galileo the "self"
+                self.sendMessage(self.data)      # technicaly it is Galileo the "self"
 
             ###### END OF THE FOR ######        
             # when the message is send, defill the fill
             self.Defile()
             # decrease the number of people waiting
+            global wait
             wait = wait -1    
                 
+            global file
             if file[0] != None:
                 data = unicode(file[0])
                 self.data = data
@@ -226,6 +237,7 @@ class SimpleEcho(WebSocket):
                 print('La file est vide')
 
             # the destination become the start
+            global start
             start = destination
             
         # if is a Monitor
