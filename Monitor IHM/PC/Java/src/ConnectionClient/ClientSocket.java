@@ -1,5 +1,5 @@
 //Thank's to Olivier Leger to help me in this part of the project
-//Jetty Library used in this part of the project : http://www.eclipse.org/jetty/
+//Jetty Library is used in this part of the project : http://www.eclipse.org/jetty/
 
 package ConnectionClient;
 

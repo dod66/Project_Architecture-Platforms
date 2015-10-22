@@ -13,17 +13,17 @@ public class ConnectionWebSocket extends Thread{
 		dest = address;
 	}
 	
-	public void run(){ //main thread not mandatory but
+	public void WSConnection(){
 		WebSocketClient client = new WebSocketClient(); //WebSocket initialization with jetty
 		try {
 			ClientSocket socket = new ClientSocket(); //create client socket with jetty
-			
+
 			client.start(); //Start socket with jetty
 			URI echoURI = new URI(dest); //Cast as URI format
-			
+
 			client.connect(socket, echoURI); //Client connection
 			socket.awaitClose(1, TimeUnit.HOURS); //Stay awake : Call from ClientSocket
-			
+
 		}catch (Throwable t){
 			t.printStackTrace();//debugging for Exception
 		}finally { //!! Executed instead of Exception

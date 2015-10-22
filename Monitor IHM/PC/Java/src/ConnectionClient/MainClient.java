@@ -8,6 +8,6 @@ public class MainClient {
 		String address = connectHttp.JSONParser(ClientHttp.received_message);
 		System.out.println(address);//Debug print
 		ConnectionWebSocket connect = new ConnectionWebSocket(address);//Connect client WS with address get from HTTP server
-		connect.run(); //Run server connection
+		connect.WSConnection(); //Run server connection
 	}
 }
