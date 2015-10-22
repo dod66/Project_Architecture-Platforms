@@ -213,6 +213,7 @@ class SimpleEcho(WebSocket):
                     
                 ### CREATE THE JSON MESSAGE FOR THE GALILEO ###
                 number = number + 1
+                global start, wait
                 infos = self.createCab(number, start, destination, wait) 
                 trameGalileo = json.dumps(infos)
                 data = unicode(trameGalileo)
