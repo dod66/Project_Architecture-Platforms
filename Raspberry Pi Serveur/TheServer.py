@@ -232,11 +232,14 @@ class SimpleEcho(WebSocket):
         else:    
             print('Message from the Monitor')
             self.Enfile()
-            if trameGalileo != None:
+            # notify message to
+            if Galileo != None:
                 wait = wait +1
                 infos = self.createCab(0, start, None, wait) 
                 trameGalileo = json.dumps(infos)
                 data = unicode(trameGalileo)
+                self.data = data
+                Galileo.sendMessage(self.data)
             
     def handleConnected(self):
         print (self.address, 'connected')
