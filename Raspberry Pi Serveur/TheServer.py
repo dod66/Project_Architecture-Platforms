@@ -73,9 +73,7 @@ resolution = Dijsktra()
 
 # the Server class
 class SimpleEcho(WebSocket):
-
-
-
+     
     #add an element to the file
     def Enfile(self):
         print('i fill the file')
