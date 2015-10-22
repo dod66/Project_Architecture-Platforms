@@ -240,7 +240,8 @@ class SimpleEcho(WebSocket):
                 data = unicode(trameGalileo)
                 self.data = data
                 Galileo.sendMessage(self.data)
-            
+                
+    # start the connexion   
     def handleConnected(self):
         print (self.address, 'connected')
         affiche = self.address
