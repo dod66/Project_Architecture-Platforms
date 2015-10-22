@@ -39,13 +39,13 @@ class SimpleEcho(WebSocket):
         if extremite == depart:
             return [depart] + trajet
         else:
-            return (affiche_peres(pere, depart, pere[extremite], [extremite] + trajet))
+            return (self.affiche_peres(pere, depart, pere[extremite], [extremite] + trajet))
 
      # function to find the best path in the graphe
     def plus_court(self, graphe,etape,fin,visites,dist,pere,depart):
         # f we arrive at the end ,  displays fathers
         if etape == fin:
-           return affiche_peres(pere,depart,fin,[])
+           return self.affiche_peres(pere,depart,fin,[])
         # if first visite, it is this step is the first : we put dist[etape] to 0
         if  len(visites) == 0 : dist[etape]=0
         # we begin to test the non visits neighbors
@@ -65,21 +65,23 @@ class SimpleEcho(WebSocket):
         non_visites = dict((s, dist.get(s,float('inf'))) for s in graphe if s not in visites)
         noeud_plus_proche = min(non_visites, key = non_visites.get)
         # recursively applying new stage taking the nearest top 
-        return plus_court(graphe,noeud_plus_proche,fin,visites,dist,pere,depart)
+        return self.plus_court(graphe,noeud_plus_proche,fin,visites,dist,pere,depart)
      
      # the "main" of Dijsktra algorithm
     def dij_rec(self, graphe,debut,fin):
-        return plus_court(graphe,debut,fin,[],{},{},debut)
+        return self.plus_court(graphe,debut,fin,[],{},{},debut)
 
 
     #add an element to the file
     def Enfile(self):
         print('i fill the file')
+        global file
         file.append(self.data)
         
      # for pop the first element in the file
     def Defile(self):
         print('i defile the file')
+        global file
         file.pop(0)
 
      # to create JSON CabInfo for Galileo
@@ -111,11 +113,14 @@ class SimpleEcho(WebSocket):
             # i pop the first element in my file
             self.Defile()
             # i look if my file have another request and i send it to Galileo
+            global file
             if file[0] != None:
+                global start, wait
                 infos = self.createCab(number, start, destination, wait) 
                 trameGalileo = json.dumps(infos)
                 data = unicode(trameGalileo)
                 self.data = data
+                self.sendMessage(self.data)
                 print('Envoi a Galileo une nouvelle demande de destination')
             else:
                 print('La file est vide')
@@ -126,16 +131,19 @@ class SimpleEcho(WebSocket):
             number = 0  # number is for the odometer, for each destination odometer is reset.
             
             # i find the destination of the Cab when i parse the JSON send by a Monitor
-            var = file[0]
-            a = var.data
-            b = a["cabRequest"]
-            c = b[0]
-            d = c["location"]
-            e = d[0]
-            destination = e["location"]  # this is the destination
+            global file
+            if file[0] != None:
+                var = file[0]
+                a = var.data
+                b = a["cabRequest"]
+                c = b[0]
+                d = c["location"]
+                e = d[0]
+                destination = e["location"]  # this is the destination
       
             ####DO RESOLVE GRAPH####
-            path = (g, start,destination)  # path is a array of point 
+            global start, g
+            path = self.dij_rec(g, start,destination)  # path is a array of point 
 
              ### CREATE THE JSON ###
             # for the creation of the JSON
@@ -145,7 +153,7 @@ class SimpleEcho(WebSocket):
             location = {}
              
              # for each point, i create a json who was sending to the monitors and another sending to the Galileo
-            for i in len(path):
+            for i in range(len(path)):
                
                 if path[i] == 'm':
                     print('go Quartir Nord, to the vertex m')
@@ -194,12 +202,14 @@ class SimpleEcho(WebSocket):
                 print('data :', toSend)
             
                # send Message to all Monitor
-                for i in Monitor:
+                global Monitor
+                for i in range(len(Monitor)):
                     Monitor[i].data = data
                     Monitor[i].sendMessage(Monitor[i].data)
                     
                 ### CREATE THE JSON MESSAGE FOR THE GALILEO ###
                 number = number + 1
+                global start, wait
                 infos = self.createCab(number, start, destination, wait) 
                 trameGalileo = json.dumps(infos)
                 data = unicode(trameGalileo)
@@ -211,8 +221,10 @@ class SimpleEcho(WebSocket):
             # when the message is send, defill the fill
             self.Defile()
             # decrease the number of people waiting
-            wait = wait -1    
-                
+            global wait
+            wait = wait -1 
+            
+            global file      
             if file[0] != None:
                 data = unicode(file[0])
                 self.data = data
@@ -222,17 +234,22 @@ class SimpleEcho(WebSocket):
                 print('La file est vide')
 
             # the destination become the start
+            global start
             start = destination
             
         # if is a Monitor
         else:    
             print('Message from the Monitor')
             self.Enfile()
-            if trameGalileo != None:
+            global Galileo
+            if Galileo != None:
+                global wait
                 wait = wait +1
                 infos = self.createCab(0, start, None, wait) 
                 trameGalileo = json.dumps(infos)
                 data = unicode(trameGalileo)
+                self.data = data
+                Galileo.sendMessage(self.data)
             
     def handleConnected(self):
         print (self.address, 'connected')
@@ -245,6 +262,7 @@ class SimpleEcho(WebSocket):
             
             print('Monitor connected')
             # i put Monitor info in a array
+            global Monitor
             Monitor.append(self)
             # SEND THE MAP TO MONITOR#
             data = unicode(essai)
